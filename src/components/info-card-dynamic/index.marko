@@ -1,0 +1,24 @@
+class {
+  declare state: {
+    isLoading: boolean,
+    cmp: Marko.Template | null
+  };
+
+  onCreate() {
+    this.state = {
+      isLoading: true,
+      cmp: null
+    };
+  }
+  async onMount() {
+    this.state.cmp = await import("../info-card/index.marko").then(m => m.default);
+    this.state.isLoading = false;
+  }
+}
+
+<if(state.isLoading)>
+  <div>Loading...</div>
+</if>
+<else>
+  <${state.cmp}/>
+</else>
