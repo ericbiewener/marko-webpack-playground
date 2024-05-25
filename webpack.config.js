@@ -132,7 +132,7 @@ function compiler(config) {
       assetModuleFilename: `${filenameTemplate}[ext][query]`,
     },
     resolve: {
-      extensions: [".js", ".json"],
+      extensions: [".js", ".json", ".ts"],
     },
     module: {
       rules: [
