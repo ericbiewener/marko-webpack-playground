@@ -1,0 +1,24 @@
+class {
+  declare state: {
+    isOpen: boolean;
+  };
+
+  onCreate() {
+    this.state = {
+      isOpen: false,
+    };
+  }
+
+  openInfoCard() {
+    this.state.isOpen = true;
+  }
+}
+
+<div>
+  <button on-click(component.openInfoCard)>
+    Open info-card
+  </button>
+</div>
+<if(state.isOpen)>
+  <info-card/>
+</if>

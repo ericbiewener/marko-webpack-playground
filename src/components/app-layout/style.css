@@ -29,7 +29,8 @@ body {
 }
 
 .container {
-  margin: 2rem auto;
+  margin: 0 auto;
+  padding: 2rem;
   width: 800px;
 }
 
@@ -118,7 +119,10 @@ textarea {
 }
 
 button {
-  padding: 0;
+  padding: 0.25rem 0.5rem;
+  background: darkblue;
+  color: white;
+  border-radius: 100px;
   cursor: pointer;
   line-height: normal;
   border: 0;
