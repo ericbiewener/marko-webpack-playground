@@ -4,17 +4,28 @@ class {
     cmp: Marko.Template | null
   };
 
+  dynamicImport = import("../info-card/index.marko").then(m => m.default)
+
   onCreate() {
+
     this.state = {
       isLoading: true,
       cmp: null
     };
   }
   async onMount() {
-    this.state.cmp = await import("../info-card/index.marko").then(m => m.default);
+    this.state.cmp = await this.dynamicImport;
     this.state.isLoading = false;
   }
 }
+
+<if(typeof window === "undefined")>
+  <await(component.dynamicImport)>
+    <@then|result|>
+      <${result} ...input/>
+    </@then>
+  </await>
+</if>
 
 <if(state.isLoading)>
   <div>info-card loading...</div>
