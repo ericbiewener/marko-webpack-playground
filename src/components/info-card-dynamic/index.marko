@@ -9,11 +9,16 @@ class {
   onCreate() {
 
     this.state = {
-      isLoading: true,
+      isLoading: false,
       cmp: null
     };
   }
   async onMount() {
+    setTimeout(() => {
+      if (this.state.cmp) return;
+      this.state.isLoading = true;
+    }, 200);
+
     this.state.cmp = await this.dynamicImport;
     this.state.isLoading = false;
   }
