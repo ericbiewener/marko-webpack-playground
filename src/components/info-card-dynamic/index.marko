@@ -1,16 +1,21 @@
+import { getBuildAssetFilename } from "../../utils/get-build-manifest";
 class {
   declare state: {
-    isLoading: boolean,
-    cmp: Marko.Template | null
+    isLoading: boolean;
+    cmp: Marko.Template | null;
   };
 
-  dynamicImport = import("../info-card/index.marko").then(m => m.default)
+  dynamicImport = import("../info-card/index.marko").then((m) => m.default);
+
+  scriptSrcs: string[] =
+    typeof window === "undefined"
+      ? getBuildAssetFilename("__SOURCE_FILENAME__")
+      : null;
 
   onCreate() {
-
     this.state = {
       isLoading: false,
-      cmp: null
+      cmp: null,
     };
   }
   async onMount() {
@@ -24,6 +29,10 @@ class {
   }
 }
 
+<for|src| of=component.scriptSrcs>
+  <script src=src no-update-if(typeof window !== "undefined")/>
+</for>
+
 <if(typeof window === "undefined")>
   <await(component.dynamicImport)>
     <@then|result|>
@@ -31,6 +40,9 @@ class {
     </@then>
   </await>
 </if>
+<else>
+  $ console.log("hydration");
+</else>
 
 <if(state.isLoading)>
   <div>info-card loading...</div>

@@ -5,6 +5,12 @@ const CSSExtractPlugin = require("mini-css-extract-plugin");
 const MarkoPlugin = require("@marko/webpack/plugin").default;
 const SpawnServerPlugin = require("spawn-server-webpack-plugin");
 const MinifyCSSPlugin = require("css-minimizer-webpack-plugin");
+const {
+  createDynamicImportsWebpackDefinePlugin,
+} = require("./build/dynamic-imports/dynamic-imports-webpack-define-plugin");
+const {
+  createSourceToBuildFilenameAssetManifestPlugin,
+} = require("./build/dynamic-imports/source-to-build-filename-asset-manifest-webpack-plugin");
 
 const markoPlugin = new MarkoPlugin();
 const { NODE_ENV = "development" } = process.env;
@@ -21,6 +27,8 @@ const spawnedServer =
     ].filter(Boolean),
   });
 
+const BUILD_DIR = path.join(__dirname, "dist");
+
 module.exports = [
   compiler({
     name: "browser",
@@ -30,7 +38,7 @@ module.exports = [
       : "eval-cheap-module-source-map",
     output: {
       filename: `${filenameTemplate}.js`,
-      path: path.join(__dirname, "dist/assets"),
+      path: path.join(BUILD_DIR, "assets"),
     },
     optimization: {
       runtimeChunk: "single",
@@ -74,6 +82,9 @@ module.exports = [
         ignoreOrder: true,
       }),
       isProd && new MinifyCSSPlugin(),
+      createSourceToBuildFilenameAssetManifestPlugin({
+        buildDir: BUILD_DIR,
+      }),
     ],
   }),
   compiler({
@@ -92,7 +103,7 @@ module.exports = [
     },
     output: {
       libraryTarget: "commonjs2",
-      path: path.join(__dirname, "dist"),
+      path: BUILD_DIR,
       devtoolModuleFilenameTemplate: "[absolute-resource-path]",
     },
     module: {
@@ -113,6 +124,7 @@ module.exports = [
       new webpack.DefinePlugin({
         "typeof window": "'undefined'",
       }),
+      createDynamicImportsWebpackDefinePlugin(BUILD_DIR),
     ],
   }),
 ];
@@ -140,6 +152,17 @@ function compiler(config) {
         {
           test: /\.marko$/,
           loader: "@marko/webpack/loader",
+        },
+        {
+          test: /\.ts?$/,
+          use: {
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true
+            }
+          },
+          exclude: /node_modules/,
+          
         },
       ],
     },

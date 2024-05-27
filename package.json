@@ -17,6 +17,7 @@
     "marked": "^3.0.8",
     "mini-css-extract-plugin": "^2.4.3",
     "spawn-server-webpack-plugin": "^6.1.0",
+    "ts-loader": "9.5.1",
     "webpack": "^5.60.0",
     "webpack-cli": "^4.9.1",
     "webpack-dev-server": "^4.3.1",
@@ -25,6 +26,7 @@
   "private": true,
   "scripts": {
     "build": "rm -rf ./dist && NODE_ENV=production webpack --progress",
+    "build:debug": "rm -rf ./dist && node --inspect-brk node_modules/.bin/webpack --progress --mode production",
     "dev": "webpack serve",
     "dev:inspect": "INSPECT=1 npm run dev",
     "start": "NODE_ENV=production node dist/main.js"
