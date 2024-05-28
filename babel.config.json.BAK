@@ -1,0 +1,5 @@
+{
+  "plugins": [
+      "./build/dynamic-imports/marko-dynamic-babel-plugin.js"
+  ]
+}

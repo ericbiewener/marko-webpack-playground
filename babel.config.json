@@ -1,5 +1,0 @@
-{
-  "plugins": [
-      "./build/dynamic-imports/inject-source-filename-babel-plugin.js"
-  ]
-}
